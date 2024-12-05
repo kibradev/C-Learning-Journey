@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+int main() {
+    // Write C code here
+    int a,b;
+    int islemType;
+    
+    printf("1. Sayıyı Girin: ");
+    scanf("%d", &a);
+    printf("2. Sayıyı Girin: ");
+    scanf("%d", &b);
+    printf("İşlem Seçin: \n");
+    printf("1 - Toplama\n");
+    printf("2 - Çıkarma\n");
+    printf("3 - Bölme\n");
+    printf("4 - Çarpma\n");
+    scanf("%d", &islemType);
+    
+    switch(islemType){
+        case 1:
+            printf("%d", (a+b));
+            break;
+        case 2:
+            printf("%d", (a-b));
+            break;
+        case 3:
+            printf("%d", (a/b));
+            break;
+        case 4:
+            printf("%d", (a*b));
+            break;
+    }
+
+    
+    return 0;
+}
