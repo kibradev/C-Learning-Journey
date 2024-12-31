@@ -13,107 +13,151 @@ typedef struct {
 
 Kisi Rehber[MaximumKisi];
 int RehberKisiSayi = 0;
-int MySecim; 
-int SeciliKisi;
 
-int CheckRehber(const char* TelefonNo){
-    int FoundNumber = 0;
-    for(int i = 0; i < RehberKisiSayi; i++){
-        if(strcmp(Rehber[i].Telefon, TelefonNo) == 0) {
-            FoundNumber = 1;
-            break;
+int CheckRehber(const char* TelefonNo) {
+    for (int i = 0; i < RehberKisiSayi; i++) {
+        if (strcmp(Rehber[i].Telefon, TelefonNo) == 0) {
+            return 1;
         }
     }
+    return 0;
+}
+
+void KisiyiSil(int kisi) {
+    for (int i = kisi; i < RehberKisiSayi - 1; i++) {
+        Rehber[i] = Rehber[i + 1];
+    }
+    RehberKisiSayi--;
+    printf("Kişi rehberden silindi.\n");
+}
+
+int KisiyiGuncelle(int kisi){
+    int islem;
+    char yeniad[50];
+    char yenisoyad[50];
+    char telefon[50];
+    printf("%s %s adlı kişinin hangi verisini güncellemek istiyorsunuz ? \n", Rehber[kisi].Ad, Rehber[kisi].Soyad);
+    printf("1 - Ad \n");
+    printf("2 - Soyad \n");
+    printf("3 - Telefon Numarası \n");
+    printf("[İşlem Numarası Girin]: ");
+    scanf("%d", &islem);
+    switch(islem){
+        case 1:
+            printf("%s %s adlı kişi için yeni bir ad girin: ", Rehber[kisi].Ad, Rehber[kisi].Ad, Rehber[kisi].Soyad);
+            scanf("%s", &yeniad);
+            printf("%s %s adlı kişinin adını %s olarak güncellediniz. \n", Rehber[kisi].Ad, Rehber[kisi].Soyad, yeniad);
+            strcpy(Rehber[kisi].Ad, yeniad);
+            break;
+        case 2:
+            printf("%s %s adlı kişi için yeni bir soyad girin: ");
+            scanf("%s", &yenisoyad);
+             printf("%s %s adlı kişinin soyadını %s olarak güncellediniz. \n", Rehber[kisi].Ad, Rehber[kisi].Soyad, yenisoyad);
+            strcpy(Rehber[kisi].Soyad, yenisoyad);
+            break;
+        case 3:
+            printf("%s %s adlı kişi için yeni bir telefon numarası girin: ");
+            scanf("%d", &telefon);
+             printf("%s %s adlı kişinin numarasını %d olarak güncellediniz. \n", Rehber[kisi].Ad, Rehber[kisi].Soyad, telefon);
+             strcpy(Rehber[kisi].Telefon, telefon);
+            break;
+        default: printf("Geçersiz Bir Seçim Yaptınız.");
+    }
     
-    return FoundNumber;
+    return 0;
 }
 
-void KisiyiSil(int kisi){
-    printf("Adlı Kişi Rehberden Silindi.");
-}
-
-void RehberIslem(int secim){
+void RehberIslem(int secim) {
     int opsiyon;
+    printf("%s %s adlı kişi için; \n", Rehber[secim].Ad, Rehber[secim].Soyad);
     printf("1 - [Kişiyi Sil] \n");
     printf("2 - [Kişiyi Güncelle] \n");
-    printf("[İşleminizi Seçin]: ");;
-    scanf("%d", &opsiyon);
-    switch(opsiyon){
+    printf("[İşleminizi Seçin]: ");
+    if (scanf("%d", &opsiyon) != 1) {
+        printf("Geçersiz giriş yaptınız. Lütfen bir sayı girin.\n");
+        while (getchar() != '\n');
+        return;
+    }
+    
+    switch (opsiyon) {
         case 1:
             KisiyiSil(secim);
             break;
         case 2:
+            KisiyiGuncelle(secim);
             break;
-        default: printf("Geçersiz Seçim Yaptınız. \n");
+        default:
+            printf("Geçersiz Seçim Yaptınız.\n");
     }
 }
 
-int RehberGoster(){
-    printf("Kişiler: (%d) \n", RehberKisiSayi);
-    if(RehberKisiSayi > 0){
-        for(int i = 0; i < RehberKisiSayi; i++){
-            printf("[%d] - %s %s - (%d) \n", i+1, Rehber[i].Ad, Rehber[i].Soyad, Rehber[i].Telefon);
+void RehberGoster() {
+    if (RehberKisiSayi > 0) {
+        for (int i = 0; i < RehberKisiSayi; i++) {
+            printf("[%d] - %s %s - (%s) \n", i + 1, Rehber[i].Ad, Rehber[i].Soyad, Rehber[i].Telefon);
         }
-        printf("[İşlem Yapmak İstediğiniz Satır Numarasını Girin] : ");
-        scanf("%d", &SeciliKisi);
-        RehberIslem(SeciliKisi);
-    } else {
-        printf("Rehberiniz Boş. \n");
-        return 0;
-    }
-
-    
-}
-
-void KisiEkle(){
-    if(RehberKisiSayi >= MaximumKisi){
-        printf("Rehberiniz Dolu. (%d)", MaximumKisi);
-        return;
-    }
-    
-    int Dongum = 1;
-    while(Dongum){
-        printf("Kişi Adı: ");
-        scanf("%s", Rehber[RehberKisiSayi].Ad);
-        printf("Kişi Soyadı: ");
-        scanf("%s", Rehber[RehberKisiSayi].Soyad);
-        printf("Telefon Numarası: ");
-        scanf("%d", Rehber[RehberKisiSayi].Telefon);
-        if(CheckRehber(Rehber[RehberKisiSayi].Telefon)){
-            printf("Bu numara zaten rehberde kayıtlı. \n");
+        int secim;
+        printf("[İşlem Yapmak İstediğiniz Satır Numarasını Girin]: ");
+        if (scanf("%d", &secim) != 1 || secim < 1 || secim > RehberKisiSayi) {
+            printf("Geçersiz seçim.\n");
+            while (getchar() != '\n');
             return;
         }
-        printf("%s %s adlı kişi telefon rehberine eklendi. \n", Rehber[RehberKisiSayi].Ad, Rehber[RehberKisiSayi].Soyad);
-        RehberKisiSayi++;
-        Dongum = 0;
+        RehberIslem(secim - 1);
+    } else {
+        printf("Rehberiniz Boş.\n");
     }
-    return;
 }
 
-int main(){
+void KisiEkle() {
+    if (RehberKisiSayi >= MaximumKisi) {
+        printf("Rehberiniz Dolu (%d).\n", MaximumKisi);
+        return;
+    }
+
+    printf("Kişi Adı: ");
+    scanf("%s", Rehber[RehberKisiSayi].Ad);
+    printf("Kişi Soyadı: ");
+    scanf("%s", Rehber[RehberKisiSayi].Soyad);
+    printf("Telefon Numarası: ");
+    scanf("%s", Rehber[RehberKisiSayi].Telefon);
+
+    if (CheckRehber(Rehber[RehberKisiSayi].Telefon)) {
+        printf("Bu numara zaten rehberde kayıtlı.\n");
+        return;
+    }
+
+    printf("%s %s adlı kişi telefon rehberine eklendi.\n", Rehber[RehberKisiSayi].Ad, Rehber[RehberKisiSayi].Soyad);
+    RehberKisiSayi++;
+}
+
+int main() {
     int Dongu = 1;
-    while(Dongu){
+    while (Dongu) {
         printf("<Rehber App> \n");
         printf("1 - Rehberi Görüntüle \n");
         printf("2 - Kişi Ekle \n");
+        printf("0 - Çıkış Yap \n");
         printf("[İşlem Numaranızı Girin]: ");
-        scanf("%d", &MySecim);
-        
-        switch(MySecim){
+        int MySecim;
+        if (scanf("%d", &MySecim) != 1) {
+            printf("Geçersiz giriş.\n");
+            while (getchar() != '\n');
+            continue;
+        }
+        switch (MySecim) {
             case 1:
                 RehberGoster();
                 break;
             case 2:
                 KisiEkle();
                 break;
-            case 3:
-                printf("Kişi Güncelle: ");
+            case 0:
+                Dongu = 0;
+                printf("Çıkış yapılıyor...\n");
                 break;
-            case 4:
-                printf("Kişi Sil: ");
-                break;
-            default: 
-                printf("Geçersiz Seçim. \n");
+            default:
+                printf("Geçersiz Seçim.\n");
         }
     }
     return 0;
