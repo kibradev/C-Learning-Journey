@@ -50,7 +50,7 @@ int KisiyiGuncelle(int kisi){
             strcpy(Rehber[kisi].Ad, yeniad);
             break;
         case 2:
-            printf("%s %s adlı kişi için yeni bir soyad girin: ");
+            printf("%s %s adlı kişi için yeni bir soyad girin: ",  Rehber[kisi].Ad, Rehber[kisi].Ad, Rehber[kisi].Soyad);
             scanf("%s", &yenisoyad);
              printf("%s %s adlı kişinin soyadını %s olarak güncellediniz. \n", Rehber[kisi].Ad, Rehber[kisi].Soyad, yenisoyad);
             strcpy(Rehber[kisi].Soyad, yenisoyad);
